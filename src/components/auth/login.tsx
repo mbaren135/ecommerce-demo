@@ -63,7 +63,7 @@ export default function LoginForm() {
           <BrandButton
             className={`w-3/4 text-brand-primary ${
               disabled ?
-              "bg-brand-accent-900 text-brand-light-900 hover:text-brand-light-900 hover:cursor-not-allowed hover:scale-100 hover:shadow-none"
+              "bg-brand-accent-800 text-brand-light-900 hover:text-brand-light-900 hover:cursor-not-allowed hover:scale-100 hover:shadow-none"
             : "bg-brand-accent hover:text-brand-primary hover:font-semibold"}`}
             onClick={handleLogin}
             disabled={loading || disabled}
@@ -80,7 +80,7 @@ export default function LoginForm() {
             </div>
           )}
         </div>
-        <div className="h-screen bg-brand-primary w-full">
+        <div className="h-screen bg-brand-accent w-full">
           <UserGrid />
         </div>
       </div>
