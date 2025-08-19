@@ -73,7 +73,7 @@ export default function LoginForm() {
 
           {error && (
             <div className="w-3/4 text-left">
-              <p className="text-brand-primary">
+              <p className="text-brand-accent">
                 {error}. <br />
                 Please enter the username and password from a user on the right.
               </p>
