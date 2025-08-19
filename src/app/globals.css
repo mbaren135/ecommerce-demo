@@ -8,6 +8,40 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-primary-100: #e7ecf5;
+  --color-brand-primary-200: #b9c9e9;
+  --color-brand-primary-300: #8ba3d8;
+  --color-brand-primary-400: #5d77b1;
+  --color-brand-primary-500: #455a8a;
+  --color-brand-primary-600: #2c3e63;
+  --color-brand-primary-700: #14213d;
+  --color-brand-primary-800: #0f192f;
+  --color-brand-primary-900: #0a101e;
+  --color-brand-primary: var(--color-brand-primary-700);
+
+  --color-brand-accent-100: #ffeccc;
+  --color-brand-accent-200: #fed99f;
+  --color-brand-accent-300: #fdc770;
+  --color-brand-accent-400: #fdb540;
+  --color-brand-accent-500: #fca311;
+  --color-brand-accent-600: #e49510;
+  --color-brand-accent-700: #c27e0d;
+  --color-brand-accent-800: #a0680a;
+  --color-brand-accent-900: #7e5108;
+  --color-brand-accent: var(--color-brand-accent-500);
+
+  --color-brand-light-100: #f6f6f6;
+  --color-brand-light-200: #e5e5e5;
+  --color-brand-light-300: #c4c4c4;
+  --color-brand-light-400: #9b9b9b;
+  --color-brand-light-500: #737373;
+  --color-brand-light-600: #5c5c5c;
+  --color-brand-light-700: #454545;
+  --color-brand-light-800: #2e2e2e;
+  --color-brand-light-900: #171717;
+  --color-brand-light: var(--color-brand-light-200);
+
+  --color-brand-dark: #000000;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
