@@ -4,7 +4,7 @@ import formatName from "@/lib/utils/format-user-name";
 
 export default function UserCard({ user }: { user: User }) {
   return (
-    <Card className="group border-brand-light-400 rounded-lg py-3">
+    <Card className="group border-brand-light-400 rounded-lg py-3 bg-brand-primary-100">
       <CardContent className="w-full max-h-fit px-3 text-brand-primary font-sans">
         <p className="text-lg font-bold">
           {formatName(user.name)}

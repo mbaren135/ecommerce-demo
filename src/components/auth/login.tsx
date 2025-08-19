@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import AuthContext from "./context";
 import UserGrid from "@/components/user/user-grid";
+import ShopDropIcon from "@/lib/icons/shop-drop";
 
 export default function LoginForm() {
   const { login, loading, error } = useContext(AuthContext);
@@ -11,20 +12,27 @@ export default function LoginForm() {
     await login(username, password);
   };
 
-  const disabled = username === "" || password === ""
+  const disabled = username === "" || password === "";
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <div className="grid grid-cols-[2fr_1fr]">
+    <div className="flex justify-center items-center w-full h-screen bg-brand-accent">
+      <div className="grid grid-cols-[2fr_1fr] w-full">
         <div className="font-sans flex flex-col gap-4 items-center text-brand-primary justify-center w-7/8 p-6 border-brand-light-400">
           <div className="flex flex-col w-3/4 m-2 gap-6">
-            <div>
-              <h1 className="text-5xl text-brand-primary">Login below!</h1>
+            <div className="flex flex-col mb-5 gap-4">
+              <div className="flex gap-8 items-center">
+                <ShopDropIcon size="60px" />
+                <h1 className="text-5xl text-brand-primary">
+                  Welcome to ShopDrop!
+                </h1>
+              </div>
+
               <p className="m-1 w-3/4">
-                Choose a user from the right to start exploring the system. All
-                users, products, and carts were found at{" "}
+                To login, choose a user from the right to start exploring the
+                system. <br />
+                All users, products, and carts were found at{" "}
                 <a
-                  className="text-blue-400 underline"
+                  className="text-brand-primary-600 underline"
                   target="_blank"
                   href="https://fakestoreapi.com"
                 >
@@ -34,18 +42,18 @@ export default function LoginForm() {
             </div>
             <p>Username</p>
             <input
-              className="border-1 p-1 w-full border-brand-light-400 rounded-sm focus:border-brand-primary-500 focus:outline-none focus:border-2 focus:bg-brand-primary-100"
+              className="border-1 p-1 w-full border-brand-primary rounded-sm text-brand-primary focus:outline-none focus:border-2 focus:bg-brand-accent-300"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <p>Password</p>
             <input
-              className="border-1 p-1 w-full border-brand-light-400 rounded-sm focus:border-brand-primary-500 focus:outline-none focus:border-2 focus:bg-brand-primary-100"
+              className="border-1 p-1 w-full border-brand-primary rounded-sm text-brand-primary focus:outline-none focus:border-2 focus:bg-brand-accent-300"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !disabled) {
-                  handleLogin()
+                  handleLogin();
                 }
               }}
               type="password"
@@ -53,9 +61,10 @@ export default function LoginForm() {
           </div>
           <button
             className={`w-3/4 p-2 rounded-md
-              ${disabled
-                ? 'bg-brand-primary-900 text-brand-light-400 cursor-not-allowed'
-                : 'bg-brand-primary text-brand-light cursor-pointer hover:text-brand-accent hover:scale-105 hover:shadow-sm'
+              ${
+                disabled
+                  ? "bg-brand-primary-900 text-brand-light-400 cursor-not-allowed"
+                  : "bg-brand-primary text-brand-light cursor-pointer hover:text-brand-accent hover:scale-105 hover:shadow-sm"
               }
               `}
             // className="w-3/4 bg-brand-primary text-brand-accentbg-brand-primary text-brand-light p-2 rounded-md hover:text-brand-accent hover:cursor-pointer hover:scale-105 hover:shadow-sm"
@@ -74,7 +83,9 @@ export default function LoginForm() {
             </div>
           )}
         </div>
-        <UserGrid />
+        <div className="h-screen bg-brand-primary w-full">
+          <UserGrid />
+        </div>
       </div>
     </div>
   );
