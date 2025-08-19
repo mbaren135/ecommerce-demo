@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import AuthContext from "./context";
 import UserGrid from "@/components/user/user-grid";
-import ShopDropIcon from "@/lib/icons/shop-drop";
+import ShopDropIcon from "@/components/ui/shop-drop-icon/shop-drop";
+import BrandButton from "../ui/button";
 
 export default function LoginForm() {
   const { login, loading, error } = useContext(AuthContext);
@@ -59,24 +60,20 @@ export default function LoginForm() {
               type="password"
             />
           </div>
-          <button
-            className={`w-3/4 p-2 rounded-md
-              ${
-                disabled
-                  ? "bg-brand-primary-900 text-brand-light-400 cursor-not-allowed"
-                  : "bg-brand-primary text-brand-light cursor-pointer hover:text-brand-accent hover:scale-105 hover:shadow-sm"
-              }
-              `}
-            // className="w-3/4 bg-brand-primary text-brand-accentbg-brand-primary text-brand-light p-2 rounded-md hover:text-brand-accent hover:cursor-pointer hover:scale-105 hover:shadow-sm"
+          <BrandButton
+            className={`w-3/4 ${
+              disabled &&
+              "bg-brand-primary-900 text-brand-light-400 hover:text-brand-light-400 hover:cursor-not-allowed hover:scale-100 hover:shadow-none"
+            }`}
             onClick={handleLogin}
             disabled={loading || disabled}
           >
             {loading ? "Logging in..." : "Login"}
-          </button>
+          </BrandButton>
 
           {error && (
             <div className="w-3/4 text-left">
-              <p className="text-brand-accent">
+              <p className="text-brand-primary">
                 {error}. <br />
                 Please enter the username and password from a user on the right.
               </p>

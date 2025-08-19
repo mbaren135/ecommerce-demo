@@ -1,4 +1,8 @@
-import { IconProps } from "@/lib/types";
+import { SVGProps } from "react";
+
+type IconProps = SVGProps<SVGSVGElement> & {
+  size?: string;
+};
 
 export default function ShopDropIcon({ size = "24px", ...props }: IconProps) {
   return (

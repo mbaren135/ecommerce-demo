@@ -8,6 +8,7 @@ type authContext = {
   logout: () => void;
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<unknown>;
   status: "authenticated" | "loading" | "unauthenticated";
+  userId: number | null;
 };
 
 const AuthContext = createContext<authContext>({
@@ -24,6 +25,7 @@ const AuthContext = createContext<authContext>({
     throw new Error("AuthProvider missing");
   },
   status: "unauthenticated",
+  userId: null
 });
 
 export default AuthContext;

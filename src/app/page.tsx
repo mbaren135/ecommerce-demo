@@ -2,11 +2,17 @@
 
 import AppProvider from "@/components/auth/global-app-provider";
 import ProductGrid from "@/components/product/product-grid";
+import { Header } from "@/components/ui/header";
 
 export default function Home() {
   return (
-    <AppProvider>
-      <ProductGrid />
-    </AppProvider>
+    <div className="min-h-screen bg-white">
+      <AppProvider>
+        <Header />
+        <main>
+          <ProductGrid />
+        </main>
+      </AppProvider>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 type statusType = "authenticated" | "loading" | "unauthenticated";
 
@@ -10,11 +10,25 @@ export function useAuth() {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   // Save token to state and localStorage
   const saveToken = (newToken: string) => {
     setToken(newToken);
     localStorage.setItem("fakestore_token", newToken);
+  };
+
+  const parseJWT = (token: string) => {
+    const base64URL = token.split(".")[1];
+    const base64 = base64URL.replace(/-/g, "+").replace(/_/g, "_");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
   };
 
   const login = async (username: string, password: string) => {
@@ -31,9 +45,17 @@ export function useAuth() {
 
       const data = await res.json();
       saveToken(data.token);
+
+      /**
+       * Decode the JWT. fakestoreapi doesn't publish a secret for verification,
+       * so we can just decode it.
+       */
+
+      const decoded = parseJWT(data.token)
+      setUserId(decoded.sub);
       setLoading(false);
       return data.token;
-      
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Login error");
@@ -67,5 +89,14 @@ export function useAuth() {
   const status: statusType =
     token && !error ? "authenticated" : loading ? "loading" : "unauthenticated";
 
-  return { token, loading, error, login, logout, fetchWithAuth, status };
+  return {
+    token,
+    loading,
+    error,
+    login,
+    logout,
+    fetchWithAuth,
+    status,
+    userId,
+  };
 }

@@ -51,7 +51,6 @@ export default function ProductGrid() {
             Discover our carefully curated selection of premium products
             designed to enhance your lifestyle.
           </p>
-          <button onClick={() => logout()}>Logout</button>
         </div>
 
         <Suspense

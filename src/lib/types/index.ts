@@ -1,5 +1,4 @@
 import { Product as ProductType } from "./product";
-import { User as UserType} from "./user"
-import { IconProps } from "./icon"
+import { User as UserType } from "./user";
 
-export type {ProductType, UserType, IconProps}
+export type { ProductType, UserType };
