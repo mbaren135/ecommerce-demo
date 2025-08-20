@@ -12,7 +12,7 @@ export async function GET(
     };
   }
 ) {
-  const { id } = await params;
+  const { id } = params;
 
   const resp = await fetch(`${FAKESTOREURL}/users/${id}`);
   if (!resp.ok) {
@@ -43,7 +43,7 @@ export async function PUT(
     };
   }
 ) {
-  const { id } = await params;
+  const { id } = params;
 
   const data = await req.json();
   console.log({ data });
