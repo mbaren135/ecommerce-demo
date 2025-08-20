@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useContext, useState } from "react";
+import { ReactNode, useContext } from "react";
 import { ShoppingCart, User, LogOut } from "lucide-react";
 import { motion, HTMLMotionProps, useAnimation } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -60,15 +60,12 @@ function HeaderButton({
   ...props
 }: HeaderButtonProps) {
   const controls = useAnimation();
-  const [hovered, setHovered] = useState(false);
 
   const handleEnter = () => {
-    setHovered(true);
     controls.start({ width: "auto", opacity: 1 });
   };
 
   const handleLeave = () => {
-    setHovered(false);
     controls.start({ width: 0, opacity: 0 });
   };
 

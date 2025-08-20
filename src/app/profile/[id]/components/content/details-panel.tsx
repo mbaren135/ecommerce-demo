@@ -1,13 +1,18 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Dispatch, SetStateAction, useState } from "react";
+import { useForm, UseFormRegisterReturn } from "react-hook-form";
 import { Eye } from "lucide-react";
 
 import BrandButton from "@/components/ui/button";
-import { User } from "@/lib/types/user";
+import { MutableUser } from "@/lib/types";
 import formatName from "@/lib/utils/format-user-name";
-import { formatUserAddress } from "@/lib/utils/user-address";
 
-export default function ProfileDetails({ user }: { user: User }) {
+export default function ProfileDetails({
+  user,
+  setUser,
+}: {
+  user: MutableUser;
+  setUser: Dispatch<SetStateAction<MutableUser | null>>;
+}) {
   return (
     <div className="flex flex-col items-center space-y-12 w-full text-brand-primary">
       <div className="flex flex-col justify-start w-full gap-2">
@@ -17,34 +22,60 @@ export default function ProfileDetails({ user }: { user: User }) {
           here.
         </p>
         <hr />
-        {/* {JSON.stringify(user)} */}
       </div>
-      <DetailsForm user={user} />
+      <DetailsForm user={user} setUser={setUser} />
     </div>
   );
 }
 
-function DetailsForm({ user }: { user: User }) {
-  const { number, street, city } = user.address;
+function DetailsForm({
+  user,
+  setUser,
+}: {
+  user: Omit<MutableUser, "name">;
+  setUser: Dispatch<SetStateAction<MutableUser | null>>;
+}) {
   const defaultValues = {
     username: user.username,
     password: user.password,
-    address: formatUserAddress({ number, street, city }),
-    phone: user.phone,
     email: user.email,
   };
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit } = useForm({ defaultValues });
+
+  const onSubmit = async (values: Omit<MutableUser, "name">) => {
+    setIsSaving(true);
+    const resp = await fetch(`/api/users/${user.id}`, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(values),
+    });
+    if (!resp.ok) {
+      setError("Bad Request: Could not modify user");
+      setIsSaving(false);
+      return;
+    }
+
+    const data = await resp.json();
+    setUser((prev) => {
+      return { ...prev, ...data.updatedUser };
+    });
+    setIsSaving(false);
+    setIsEditing(false);
+  };
 
   return (
     <form
-      onSubmit={handleSubmit(async () => {
-        setIsSaving(true);
-        await new Promise((r) => setTimeout(r, 2000));
-        setIsSaving(false);
-        setIsEditing(false);
+      onSubmit={handleSubmit(async (data) => {
+        onSubmit({
+          id: user.id,
+          username: data.username,
+          password: data.password,
+          email: data.email,
+        });
       })}
       className="flex flex-col w-2/3 items-start gap-6"
     >
@@ -69,6 +100,9 @@ function DetailsForm({ user }: { user: User }) {
           </BrandButton>
         )}
       </div>
+      {error && (
+        <p className="text-lg font-semibold text-brand-accent">{error}</p>
+      )}
       <FormInput
         label="Email"
         register={register("email")}
@@ -80,16 +114,6 @@ function DetailsForm({ user }: { user: User }) {
         isEditing={isEditing}
       />
       <PasswordInput register={register("password")} isEditing={isEditing} />
-      <FormInput
-        label="Phone"
-        register={register("phone")}
-        isEditing={isEditing}
-      />
-      <FormInput
-        label="Address"
-        register={register("address")}
-        isEditing={isEditing}
-      />
     </form>
   );
 }
@@ -100,7 +124,7 @@ function FormInput({
   isEditing,
 }: {
   label: string;
-  register: {};
+  register: UseFormRegisterReturn;
   isEditing: boolean;
 }) {
   return (
@@ -120,7 +144,7 @@ function PasswordInput({
   register,
   isEditing,
 }: {
-  register: {};
+  register: UseFormRegisterReturn;
   isEditing: boolean;
 }) {
   const [showPassword, setShowPassword] = useState(false);
