@@ -4,15 +4,13 @@ const FAKESTOREURL = "https://fakestoreapi.com";
 
 export async function GET(
   _req: Request,
-  {
-    params,
-  }: {
+  context: {
     params: {
       id: string;
     };
   }
 ) {
-  const { id } = params;
+  const { id } = context.params;
 
   const resp = await fetch(`${FAKESTOREURL}/users/${id}`);
   if (!resp.ok) {
@@ -35,15 +33,13 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  {
-    params,
-  }: {
+  context: {
     params: {
       id: string;
     };
   }
 ) {
-  const { id } = params;
+  const { id } = context.params;
 
   const data = await req.json();
   console.log({ data });
