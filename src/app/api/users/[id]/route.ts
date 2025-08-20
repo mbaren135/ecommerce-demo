@@ -2,13 +2,16 @@ import { NextResponse } from "next/server";
 
 const FAKESTOREURL = "https://fakestoreapi.com";
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
-export async function GET(_req: Request, { params }: Params) {
+export async function GET(
+  _req: Request,
+  {
+    params,
+  }: {
+    params: {
+      id: string;
+    };
+  }
+) {
   const { id } = await params;
 
   const resp = await fetch(`${FAKESTOREURL}/users/${id}`);
@@ -30,7 +33,16 @@ export async function GET(_req: Request, { params }: Params) {
   });
 }
 
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(
+  req: Request,
+  {
+    params,
+  }: {
+    params: {
+      id: string;
+    };
+  }
+) {
   const { id } = await params;
 
   const data = await req.json();
