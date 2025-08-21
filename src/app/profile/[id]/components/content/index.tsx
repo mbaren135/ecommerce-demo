@@ -1,49 +1,48 @@
 import { MutableUser } from "@/lib/types";
+import { ErrorBoundary } from "react-error-boundary";
 import ProfileDetails from "./details-panel";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import DetailsSkeleton from "./details-skeleton";
+import BrandButton from "@/components/ui/button";
 
 // Cache for storing promises and results
-const cache = new Map<string, Promise<MutableUser> | MutableUser>();
+type Pending = { status: "pending"; promise: Promise<MutableUser> };
+type Success = { status: "success"; data: MutableUser };
+type Failure = { status: "error"; error: Error };
+type Entry = Pending | Success | Failure;
+const cache = new Map<string, Entry>();
 
-// Custom hook that works with Suspense
 function useUser(userId: string): MutableUser {
-  const cacheKey = userId;
-  
-  if (cache.has(cacheKey)) {
-    const cached = cache.get(cacheKey);
-    
-    if (cached instanceof Promise) {
-      // Still loading, throw the promise for Suspense to catch
-      throw cached;
-    }
-    
-    // Return cached result
-    //@ts-ignore
-    return cached;
+  const key = userId;
+  const entry = cache.get(key);
+
+  if (!entry) {
+    const promise = fetch(`/api/users/${userId}`)
+      .then(async (resp) => {
+        if (!resp.ok) {
+          throw new Error(`Bad Request: User with id ${userId} not found`);
+        }
+        const data = await resp.json();
+        return data.user as MutableUser;
+      })
+      .then((user) => {
+        cache.set(key, { status: "success", data: user });
+        return user;
+      })
+      .catch((err: unknown) => {
+        const error = err instanceof Error ? err : new Error("Unknown error");
+        // IMPORTANT: store the error instead of deleting the entry
+        cache.set(key, { status: "error", error });
+        throw error;
+      });
+
+    cache.set(key, { status: "pending", promise });
+    throw promise;
   }
-  
-  // Create and cache the promise
-  const promise = fetch(`/api/users/${userId}`)
-    .then(async (resp) => {
-      if (!resp.ok) {
-        throw new Error(`Bad Request: User with id ${userId} not found!`);
-      }
-      const data = await resp.json();
-      const user = data.user;
-      
-      // Cache the result
-      cache.set(cacheKey, user);
-      return user;
-    })
-    .catch((error) => {
-      // Remove failed promise from cache so it can be retried
-      cache.delete(cacheKey);
-      throw error;
-    });
-  
-  cache.set(cacheKey, promise);
-  throw promise; // Suspense will catch this
+
+  if (entry.status === "pending") throw entry.promise;
+  if (entry.status === "error") throw entry.error;
+  return entry.data; // success
 }
 
 // Component that uses the user data
@@ -56,6 +55,11 @@ function ProfileContentInner({
 }) {
   const fetchedUser = useUser(userId);
   const [user, setUser] = useState<MutableUser>(fetchedUser);
+
+  // Sync local editable state when fetched user changes
+  useEffect(() => {
+    setUser(fetchedUser);
+  }, [fetchedUser.id]);
 
   // Update local state when fetchedUser changes (e.g., different userId)
   if (user.id !== fetchedUser.id) {
@@ -77,16 +81,30 @@ function ProfileContentInner({
   return null;
 }
 
-// Error boundary wrapper
-function ErrorBoundary({ children }: { children: React.ReactNode }) {
-  try {
-    return <>{children}</>;
-  } catch (error) {
-    if (error instanceof Promise) {
-      throw error; // Re-throw promises for Suspense
-    }
-    return <>Error</>;
-  }
+function ErrorFallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error;
+  resetErrorBoundary: () => void;
+}) {
+  return (
+    <div
+      role="alert"
+      className="flex items-start justify-between space-y-12 w-full text-brand-accent"
+    >
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold">Something went wrong!</h1>
+        <pre className="text-md">{error.message}</pre>
+      </div>
+      <BrandButton
+        className="bg-brand-accent-200 border-brand-accent border-2 text-brand-primary hover:text-brand-primary"
+        onClick={resetErrorBoundary}
+      >
+        Try Again
+      </BrandButton>
+    </div>
+  );
 }
 
 export default function ProfileContent({
@@ -97,7 +115,11 @@ export default function ProfileContent({
   content: "details" | "cart" | "delete";
 }) {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => cache.delete(userId)}
+      resetKeys={[userId]}
+    >
       <Suspense fallback={<DetailsSkeleton />}>
         <ProfileContentInner userId={userId} content={content} />
       </Suspense>
