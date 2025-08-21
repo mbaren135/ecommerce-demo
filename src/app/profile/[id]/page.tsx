@@ -1,7 +1,8 @@
 "use client";
 import { useState, use } from "react";
 import SideNav from "./components/side-nav";
-import { ProfileContent } from "./components/content";
+import ProfileContent from "./components/content";
+
 
 export default function ProfilePage({
   params,

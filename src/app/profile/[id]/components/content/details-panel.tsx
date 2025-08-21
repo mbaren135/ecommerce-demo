@@ -11,7 +11,7 @@ export default function ProfileDetails({
   setUser,
 }: {
   user: MutableUser;
-  setUser: Dispatch<SetStateAction<MutableUser | null>>;
+  setUser: Dispatch<SetStateAction<MutableUser>>;
 }) {
   return (
     <div className="flex flex-col items-center space-y-12 w-full text-brand-primary">
@@ -33,7 +33,7 @@ function DetailsForm({
   setUser,
 }: {
   user: Omit<MutableUser, "name">;
-  setUser: Dispatch<SetStateAction<MutableUser | null>>;
+  setUser: Dispatch<SetStateAction<MutableUser>>;
 }) {
   const defaultValues = {
     username: user.username,
