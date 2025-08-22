@@ -12,10 +12,8 @@ import {
 type IndicatorType = { top: number; height: number; width: number };
 
 export default function SideNav({
-  content,
   setContent,
 }: {
-  content: "details" | "cart" | "delete";
   setContent: Dispatch<SetStateAction<"details" | "cart" | "delete">>;
 }) {
   const [indicator, setIndicator] = useState<IndicatorType | null>({

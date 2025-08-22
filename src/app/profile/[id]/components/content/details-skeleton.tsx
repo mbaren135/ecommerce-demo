@@ -1,6 +1,6 @@
 export default function DetailsSkeleton() {
   return (
-    <div className="flex flex-col items-center space-y-12 w-full text-brand-primary">
+    <div className="flex flex-col items-center space-y-12 w-full text-brand-primary p-6">
       <div className="flex flex-col justify-start w-full gap-2">
         <div className="h-9 w-1/2 bg-brand-primary-200 rounded animate-pulse" />
         <div className="h-7 w-3/4 bg-brand-primary-200 rounded animate-pulse" />

@@ -14,7 +14,7 @@ export default function ProfileDetails({
   setUser: Dispatch<SetStateAction<MutableUser>>;
 }) {
   return (
-    <div className="flex flex-col items-center space-y-12 w-full text-brand-primary">
+    <div className="flex flex-col items-center space-y-12 w-full text-brand-primary p-6">
       <div className="flex flex-col justify-start w-full gap-2">
         <h1 className="text-3xl font-bold">Welcome {formatName(user.name)}!</h1>
         <p className="text-lg">

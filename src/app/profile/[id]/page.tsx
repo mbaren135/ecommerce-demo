@@ -16,8 +16,8 @@ export default function ProfilePage({
 
   return (
     <div className="flex w-full h-full">
-      <SideNav content={content} setContent={setContent} />
-      <div className="w-3/4 p-6">
+      <SideNav setContent={setContent} />
+      <div className="w-3/4">
         <ProfileContent userId={id} content={content} />
       </div>
     </div>

@@ -4,6 +4,7 @@ import ProfileDetails from "./details-panel";
 import { Suspense, useEffect, useState } from "react";
 import DetailsSkeleton from "./details-skeleton";
 import BrandButton from "@/components/ui/button";
+import ProfileDelete from "./delete-panel";
 
 // Cache for storing promises and results
 type Pending = { status: "pending"; promise: Promise<MutableUser> };
@@ -59,7 +60,7 @@ function ProfileContentInner({
   // Sync local editable state when fetched user changes
   useEffect(() => {
     setUser(fetchedUser);
-  }, [fetchedUser.id]);
+  }, [fetchedUser]);
 
   // Update local state when fetchedUser changes (e.g., different userId)
   if (user.id !== fetchedUser.id) {
@@ -75,7 +76,7 @@ function ProfileContentInner({
   }
 
   if (content === "delete") {
-    return <div>Boo hoo</div>;
+    return <ProfileDelete userId={userId} />;
   }
 
   return null;
@@ -91,14 +92,14 @@ function ErrorFallback({
   return (
     <div
       role="alert"
-      className="flex items-start justify-between space-y-12 w-full text-brand-accent"
+      className="flex items-start justify-between space-y-12 w-full text-brand-accent p-6"
     >
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold">Something went wrong!</h1>
         <pre className="text-md">{error.message}</pre>
       </div>
       <BrandButton
-        className="bg-brand-accent-200 border-brand-accent border-2 text-brand-primary hover:text-brand-primary"
+        variant="delete"
         onClick={resetErrorBoundary}
       >
         Try Again

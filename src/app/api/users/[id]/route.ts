@@ -46,7 +46,6 @@ export async function PUT(
   const { id } = await params;
 
   const data = await req.json();
-  console.log({ data });
 
   const resp = await fetch(`${FAKESTOREURL}/users/${id}`, {
     method: "PUT",
@@ -63,4 +62,27 @@ export async function PUT(
     status: 200,
     updatedUser: updatedUser,
   });
+}
+
+export async function DELETE(
+  _req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
+) {
+  const { id } = await params;
+
+  const resp = await fetch(`${FAKESTOREURL}/users/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!resp.ok) {
+    return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+  }
+
+  return NextResponse.json({ status: 200 });
 }
