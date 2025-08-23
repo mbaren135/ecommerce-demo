@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import DetailsSkeleton from "./details-skeleton";
 import BrandButton from "@/components/ui/button";
 import ProfileDelete from "./delete-panel";
+import ProfileCart from "./cart-panel";
 
 // Cache for storing promises and results
 type Pending = { status: "pending"; promise: Promise<MutableUser> };
@@ -21,7 +22,9 @@ function useUser(userId: string): MutableUser {
     const promise = fetch(`/api/users/${userId}`)
       .then(async (resp) => {
         if (!resp.ok) {
-          throw new Error(`Bad Request: User with id ${userId} not found`);
+          throw new Error(`Bad Request: User with id ${userId} not found`, {
+            cause: resp.status,
+          });
         }
         const data = await resp.json();
         return data.user as MutableUser;
@@ -62,17 +65,17 @@ function ProfileContentInner({
     setUser(fetchedUser);
   }, [fetchedUser]);
 
-  // Update local state when fetchedUser changes (e.g., different userId)
-  if (user.id !== fetchedUser.id) {
-    setUser(fetchedUser);
-  }
+  // // Update local state when fetchedUser changes (e.g., different userId)
+  // if (user.id !== fetchedUser.id) {
+  //   setUser(fetchedUser);
+  // }
 
   if (content === "details") {
     return <ProfileDetails user={user} setUser={setUser} />;
   }
 
   if (content === "cart") {
-    return <div>Shopping Cart</div>;
+    return <ProfileCart userId={userId} />;
   }
 
   if (content === "delete") {
@@ -97,11 +100,11 @@ function ErrorFallback({
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold">Something went wrong!</h1>
         <pre className="text-md">{error.message}</pre>
+        {typeof error.cause === "string" || typeof error.cause === "number" ? (
+          <div className="text-sm">Status Code: {error.cause}</div>
+        ) : null}
       </div>
-      <BrandButton
-        variant="delete"
-        onClick={resetErrorBoundary}
-      >
+      <BrandButton variant="delete" onClick={resetErrorBoundary}>
         Try Again
       </BrandButton>
     </div>

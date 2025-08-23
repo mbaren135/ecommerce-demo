@@ -9,7 +9,7 @@ export default function ProfileDelete({ userId }: { userId: string }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <div className={`relative h-full p-6 ${isOpen && "bg-brand-light-100"}`}>
+    <div className={`relative h-full p-6 ${isOpen && "bg-brand-light-100 cursor-not-allowed"}`}>
       <div className={`${isOpen && "opacity-50"}`}>
         <div className="flex justify-between">
           <h1 className="text-brand-primary text-3xl font-bold">
@@ -18,6 +18,7 @@ export default function ProfileDelete({ userId }: { userId: string }) {
           <BrandButton
             className="min-w-1/7"
             variant="delete"
+            disabled={isOpen}
             onClick={() => setIsOpen(true)}
           >
             Delete
@@ -66,7 +67,7 @@ function ConfirmationModal({
   };
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/3 h-2/5 rounded-md border-1 border-brand-primary overflow-auto bg-white">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/3 h-2/5 rounded-md border-1 border-brand-primary overflow-auto bg-white cursor-default z-10">
       <div
         className="flex flex-col w-full h-full p-4"
         onClick={(e) => e.stopPropagation()}

@@ -52,7 +52,7 @@ export async function PUT(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
+  
   if (!resp.ok) {
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });
   }
