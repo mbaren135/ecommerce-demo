@@ -1,18 +1,54 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
 import { useForm, UseFormRegisterReturn } from "react-hook-form";
 import { Eye } from "lucide-react";
+import { ErrorBoundary } from "react-error-boundary";
 
 import BrandButton from "@/components/ui/button";
 import { MutableUser } from "@/lib/types";
 import formatName from "@/lib/utils/format-user-name";
+import useUser, { clearUserCache } from "@/lib/hooks/useUser";
+import DetailsSkeleton from "./details-skeleton";
 
-export default function ProfileDetails({
-  user,
-  setUser,
+function ErrorFallback({
+  error,
+  resetErrorBoundary,
 }: {
-  user: MutableUser;
-  setUser: Dispatch<SetStateAction<MutableUser>>;
+  error: Error;
+  resetErrorBoundary: () => void;
 }) {
+  return (
+    <div
+      role="alert"
+      className="flex items-start justify-between space-y-12 w-full text-brand-accent p-6"
+    >
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold">Something went wrong!</h1>
+        <pre className="text-md">{error.message}</pre>
+        {typeof error.cause === "string" || typeof error.cause === "number" ? (
+          <div className="text-sm">Status Code: {error.cause}</div>
+        ) : null}
+      </div>
+      <BrandButton variant="delete" onClick={resetErrorBoundary}>
+        Try Again
+      </BrandButton>
+    </div>
+  );
+}
+
+function ProfileDetailsInner({ userId }: { userId: string }) {
+  const fetchedUser = useUser(userId);
+  const [user, setUser] = useState<MutableUser>(fetchedUser);
+
+  // Sync local editable state when fetched user changes
+  useEffect(() => {
+    setUser(fetchedUser);
+  }, [fetchedUser]);
+
+  // Update local state when fetchedUser changes (e.g., different userId)
+  if (user.id !== fetchedUser.id) {
+    setUser(fetchedUser);
+  }
+
   return (
     <div className="flex flex-col items-center space-y-12 w-full text-brand-primary p-6">
       <div className="flex flex-col justify-start w-full gap-2">
@@ -25,6 +61,20 @@ export default function ProfileDetails({
       </div>
       <DetailsForm user={user} setUser={setUser} />
     </div>
+  );
+}
+
+export default function ProfileDetails({ userId }: { userId: string }) {
+  return (
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => clearUserCache(userId)}
+      resetKeys={[userId]}
+    >
+      <Suspense fallback={<DetailsSkeleton />}>
+        <ProfileDetailsInner userId={userId} />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
