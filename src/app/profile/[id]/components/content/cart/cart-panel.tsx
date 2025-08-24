@@ -6,6 +6,7 @@ import useCarts, { clearCartCache } from "@/lib/hooks/useCarts";
 import useUser from "@/lib/hooks/useUser";
 import formatName from "@/lib/utils/format-user-name";
 import CartExpander from "./cart-expander";
+import CartSkeleton from "./cart-skeleton";
 
 function ErrorFallback({
   error,
@@ -83,7 +84,7 @@ export default function ProfileCart({ userId }: { userId: string }) {
       onReset={() => clearCartCache(userId)}
       resetKeys={[userId]}
     >
-      <Suspense>
+      <Suspense fallback={<CartSkeleton />}>
         <ProfileCartInner userId={userId} />
       </Suspense>
     </ErrorBoundary>
