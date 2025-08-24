@@ -10,7 +10,7 @@ export function clearCartCache(userId: string) {
   cache.delete(userId);
 }
 
-export default function useCarts(userId: string): {data: CartType[], cache: Map<string, Entry>} {
+export default function useCarts(userId: string): CartType[] {
   const key = userId;
   const entry = cache.get(key);
 
@@ -45,5 +45,5 @@ export default function useCarts(userId: string): {data: CartType[], cache: Map<
 
   if (entry.status === "pending") throw entry.promise;
   if (entry.status === "error") throw entry.error;
-  return { data: entry.data, cache}
+  return entry.data
 }

@@ -1,12 +1,11 @@
 import { CartType } from "@/lib/types";
 import { ErrorBoundary } from "react-error-boundary";
-import {
-  Suspense,
-  useEffect,
-  useState,
-} from "react";
+import { Suspense, useEffect, useState } from "react";
 import BrandButton from "@/components/ui/button";
 import useCarts, { clearCartCache } from "@/lib/hooks/useCarts";
+import useUser from "@/lib/hooks/useUser";
+import formatName from "@/lib/utils/format-user-name";
+import CartExpander from "./cart-expander";
 
 function ErrorFallback({
   error,
@@ -45,22 +44,34 @@ function ErrorFallback({
   );
 }
 
-function ProfileCartInner({
-  userId,
-}: {
-  userId: string;
-}) {
-  const { data } = useCarts(userId);
+function ProfileCartInner({ userId }: { userId: string }) {
+  const cartData = useCarts(userId);
+  const user = useUser(userId);
   const [carts, setCarts] = useState<CartType[] | null>(null);
+  const [openCart, setOpenCart] = useState<number | null>(null);
 
   useEffect(() => {
-    setCarts(data);
-  }, [data]);
+    setCarts(cartData);
+  }, [cartData]);
+ 
+  useEffect(() => {
+    console.log(openCart);
+  }, [openCart]);
 
   return (
-    <div className="flex flex-col gap-4 p-6">
-      {(carts ?? []).map((cart) => (
-        <div key={cart.id}>{JSON.stringify(cart)}</div>
+    <div className="flex flex-col items-center space-y-12 w-full text-brand-primary p-6">
+      <div className="flex flex-col justify-start w-full gap-2">
+        <h1 className="text-3xl font-bold">
+          {formatName(user.name)}, you have {carts?.length} cart
+          {carts?.length && carts?.length > 1 && "s"} to view
+        </h1>
+        <p className="text-lg">
+          Click on a cart below to view your dropped items.
+        </p>
+        <hr />
+      </div>
+      {(carts ?? []).map((cart, index) => (
+        <CartExpander key={cart.id} cart={cart} openCart={openCart} setOpenCart={setOpenCart} index={index + 1}/>
       ))}
     </div>
   );

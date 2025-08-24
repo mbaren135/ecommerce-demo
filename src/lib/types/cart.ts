@@ -1,5 +1,17 @@
+import { ProductType } from ".";
 
 type Cart = {
+    id: number;
+    userId: number;
+    date: string;
+    products: {
+        product: ProductType | null;
+        quantity: number;
+    }[];
+    __v: number;
+}
+
+type PrimitiveCart = {
     id: number;
     userId: number;
     date: string;
@@ -10,4 +22,4 @@ type Cart = {
     __v: number;
 }
 
-export type { Cart };
+export type { Cart, PrimitiveCart };
