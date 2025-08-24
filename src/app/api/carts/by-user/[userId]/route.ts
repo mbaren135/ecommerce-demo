@@ -6,7 +6,7 @@ const FAKESTOREURL = "https://fakestoreapi.com";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   const { userId } = await params;
   const resp = await fetch(`${FAKESTOREURL}/carts`);
