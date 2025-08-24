@@ -25,7 +25,7 @@ export function Header() {
           <div className="flex items-center space-x-4">
             <HeaderButton
               label="Profile"
-              onClick={() => router.push(`profile/${userId}`)}
+              onClick={() => router.push(`/profile/${userId}`)}
             >
               <User className="h-6 w-6" />
             </HeaderButton>
