@@ -1,12 +1,18 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import { ProductType } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
 import BrandButton from "../ui/button";
 
 export default function ProductCard({ product }: { product: ProductType }) {
+  const router = useRouter()
+
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg border-brand-light-400 py-0 pt-6 pb-2">
+    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg border-brand-accent py-0 pt-6 pb-2 cursor-pointer flex flex-col" onClick={() => {
+      router.push(`/products/${product.id}`)
+    }}>
       <div className="relative aspect-square overflow-hidden">
         <Image
           src={product.image}

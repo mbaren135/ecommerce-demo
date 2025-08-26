@@ -45,15 +45,15 @@ export default function ProductGrid() {
         <p className="mx-auto text-brand-primary w-1/2 text-lg">
           Discover our carefully curated selection of premium products designed
           to enhance your lifestyle. <br />
-          Select a product to view more details, or add directly to your cart
-          with 1{" "}
+          Select a product to view more details, or drop it in your cart
+          with just a few {" "}
           <motion.span
             className="inline-block"
             initial={{ scale: 1, x: 0 }}
             animate={{ scale: [1, 1.3, 1], x: [0, 5, 0] }}
             transition={{ duration: 0.6, delay: 1.5 }}
           >
-            click!
+            clicks!
           </motion.span>
         </p>
       </div>
