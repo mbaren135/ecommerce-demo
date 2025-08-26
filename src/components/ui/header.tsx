@@ -13,11 +13,14 @@ export function Header() {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0 z-50 bg-brand-primary text-brand-light shadow-xl">
+    <header className="sticky top-0 z-50 bg-brand-primary text-brand-light shadow-xl h-[64px]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/*Logo*/}
-          <div className="flex items-center space-x-8 text-brand-accent cursor-pointer" onClick={() => router.push("/")}>
+          <div
+            className="flex items-center space-x-8 text-brand-accent cursor-pointer"
+            onClick={() => router.push("/")}
+          >
             <ShopDropIcon size="40px" />
             <h1 className="text-2xl font-bold">ShopDrop</h1>
           </div>
