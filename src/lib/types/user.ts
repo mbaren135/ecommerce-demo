@@ -19,3 +19,5 @@ export type User = {
     phone: string,
     username: string
 }
+
+export type MutableUser = Omit<User, "address" | "phone">;

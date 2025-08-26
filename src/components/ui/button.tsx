@@ -1,15 +1,33 @@
 import { cn } from "@/lib/utils/cn";
-import { ComponentProps } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-export default function BrandButton({ className, ...props }: ComponentProps<"button">) {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "delete";
+}
+
+export default function BrandButton({
+  className,
+  disabled = false,
+  variant = "primary",
+  ...props
+}: ButtonProps) {
+  const variantStyles =
+    variant === "primary"
+      ? "bg-brand-primary text-brand-light p-2 rounded-md hover:text-brand-accent"
+      : "bg-brand-accent-200 border-brand-accent border-2 text-brand-primary hover:text-brand-primary";
+
+  const disabledStyles = !disabled
+    ? "hover:scale-105 hover:cursor-pointer hover:shadow-sm"
+    : `hover:cursor-not-allowed ${
+        variant === "primary"
+          ? "text-brand-light-600 hover:text-brand-light-600 bg-brand-primary-900"
+          : "border-transparent text-brand-light-500 hover:text-brand-light-500"
+      }`;
+
   return (
     <button
-      className={cn(
-        "bg-brand-primary text-brand-light p-2 rounded-md hover:text-brand-accent hover:cursor-pointer hover:scale-105 hover:shadow-sm",
-        className
-      )}
       {...props}
+      className={cn("p-2 rounded-md", variantStyles, disabledStyles, className)}
     />
   );
 }
-
