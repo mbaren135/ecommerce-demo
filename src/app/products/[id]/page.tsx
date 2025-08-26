@@ -7,6 +7,7 @@ import BrandButton from "@/components/ui/button";
 import useProduct, { clearProductCache } from "@/lib/hooks/useProduct";
 import { ProductType } from "@/lib/types";
 import ProductInfo from "./components/product-info";
+import ProductInfoSkeleton from "./components/product-info-skeleton";
 
 function ErrorFallback({
   error,
@@ -75,7 +76,7 @@ export default function ProductPage({
         onReset={() => clearProductCache(id)}
         resetKeys={[id]}
       >
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<ProductInfoSkeleton />}>
           <ProductDetailsInner productId={id} />
         </Suspense>
       </ErrorBoundary>
