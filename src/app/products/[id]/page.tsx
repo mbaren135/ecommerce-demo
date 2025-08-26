@@ -47,7 +47,7 @@ function ProductDetailsInner({ productId }: { productId: string }) {
       <div className="flex flex-row gap-6 w-full h-full">
         <div className="w-2/5 m-y-6 border-r border-r-brand-accent relative overflow-hidden">
           <Image
-            src={product.image}
+            src={image}
             alt={product.title}
             fill
             sizes="25vw"
