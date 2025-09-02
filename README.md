@@ -20,17 +20,9 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## About the project
 
-To learn more about Next.js, take a look at the following resources:
+This is an ongoing personal project to demonstrate front-end development skills. The project uses [FakestoreAPI](https://fakestoreapi.com/) to populate the store front with some immutable data. Some of the upcoming upgrades to the project include improved authentication, developing a product rating workflow, and implementing 'cart drop' functionality to allow products to be added to carts. Hopefully one day, the project will use a database to allow for new products/users and permanent data manipulation to create a more robust application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Tech
+The project uses Framer Motion and TailwindCSS for the styling, and custom error handling is developed using the library [react-error-boundary](https://github.com/bvaughn/react-error-boundary)
